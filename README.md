@@ -73,6 +73,17 @@ which is specified by the `--range` option.
 
 How do I use it?
 ----------------
+The generator creates files based on this typedef:
+
+    typedef struct  {
+	const uint8_t * data;
+	char startchar;
+	uint8_t length;
+	int16_t lookup[];
+    } font_t;
+
+Pointers to `const font_t` can be passed around to drawing routines:
+
     uint8_t charnum = c - font->startchar;       // If the font starts with 'A', change 'A' to 0, for the 0th char
     int offset = font->lookup[charnum];          // Get the offset into the font table
     const uint8_t * glyph = &font->data[offset]; // Get the glyph data, starting with width and byte length
@@ -83,4 +94,7 @@ How do I use it?
 		uint8_t pages = bytelen / width; 
 
 From there you can dump it into your screen buffer however you see fit.
-    
+
+It's useful to create a build script that will auto-generate fonts from, say OTF files (use otf2bfd)
+that can then be used from a makefile. An example is included.
+
